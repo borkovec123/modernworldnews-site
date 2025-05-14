@@ -1105,19 +1105,25 @@ document.addEventListener('DOMContentLoaded', function () {
   const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
   allLinks.forEach(link => {
     try {
-      const originalUrl = new URL(link.href);
-      // Clear all known tracking params first
-      keys.forEach(key => originalUrl.searchParams.delete(key));
-      // Append fresh values
+      const url = new URL(link.href);
+
+      // Clear all potential old tracking params first
+      keys.forEach(key => url.searchParams.delete(key));
+
+      // Append only fresh values from storage
       const clickId = localStorage.getItem("click_id");
-      if (clickId) originalUrl.searchParams.set("sub", clickId);
+      if (clickId) url.searchParams.set("sub", clickId);
+
       keys.forEach(key => {
         if (key !== "sub") {
           const val = localStorage.getItem(key);
-          if (val) originalUrl.searchParams.set(key, val);
+          if (val) {
+            url.searchParams.set(key, val);
+          }
         }
       });
-      link.href = originalUrl.toString();
+
+      link.href = url.toString();
     } catch (e) {
       console.warn("Could not rewrite link:", link.href);
     }
