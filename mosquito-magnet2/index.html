@@ -5,6 +5,22 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
+  <script>
+    (function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "creative_id", "zone_id", "widget_id"];
+      keys.forEach(key => {
+        const value = urlParams.get(key);
+        if (value) {
+          localStorage.setItem(key, value);
+        }
+      });
+      const clickId = urlParams.get("sub");
+      if (clickId) {
+        localStorage.setItem("click_id", clickId);
+      }
+    })();
+  </script>
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
