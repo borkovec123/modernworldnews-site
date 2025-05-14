@@ -418,7 +418,7 @@
 <p>And that’s not even counting the anti-itch creams you buy after you get bitten.</p>
 <p>When you add it up, that’s hundreds of dollars a year — and you still get bitten.</p>
 <div style="text-align: center; margin: 40px 0;">
-<a href="https://buzzblock.shop/seasonal.html" style="background-color: #00a651; color: white; font-size: 20px; font-weight: bold; padding: 15px 30px; border-radius: 8px; text-decoration: none; display: inline-block;" target="_blank">
+<a data-rewrite="true" href="https://buzzblock.shop/seasonal.html" style="background-color: #00a651; color: white; font-size: 20px; font-weight: bold; padding: 15px 30px; border-radius: 8px; text-decoration: none; display: inline-block;" target="_blank">
       GET 50% OFF BUZZBLOCK NOW
     </a>
 <div style="margin-top: 10px; font-size: 14px; color: #666;">
@@ -908,10 +908,10 @@ isabella.jpg"/>
 </div> <!-- ✅ This closes ONLY the MAIN CONTENT correctly -->
 <!-- Sidebar starts here -->
 <div class="sidebar">
-<a href="https://9805o.bemobtrcks.com/click" target="_blank">
+<a data-rewrite="true" href="https://9805o.bemobtrcks.com/click" target="_blank">
 <img alt="BuzzBlock Product" src="../assets/images/side product.png"/>
 </a>
-<a class="cta-button" href="https://buzzblock.shop/seasonal.html" target="_blank">GET 50% OFF BUZZBLOCK NOW!</a>
+<a class="cta-button" data-rewrite="true" href="https://buzzblock.shop/seasonal.html" target="_blank">GET 50% OFF BUZZBLOCK NOW!</a>
 </div>
 </div> <!-- ✅ This closes the CONTAINER correctly -->
 <!-- Lightbox Modal with Close Button -->
@@ -960,7 +960,7 @@ isabella.jpg"/>
     }
   });
     </script>
-<a class="floating-cta" href="https://buzzblock.shop/seasonal.html" id="floatingCta" target="_blank">GET 50% OFF BuzzBlock Now!</a>
+<a class="floating-cta" data-rewrite="true" href="https://buzzblock.shop/seasonal.html" id="floatingCta" target="_blank">GET 50% OFF BuzzBlock Now!</a>
 <script>
         window.addEventListener('scroll', function() {
           const floatingCta = document.getElementById('floatingCta');
@@ -1017,7 +1017,7 @@ default.jpg" alt="Anonymous">
 <div class="exit-popup-content">
 <h2>Wait! Don’t Miss This Deal</h2>
 <p>We’re still offering <strong>50% OFF BuzzBlock</strong> — grab yours now before it's gone!</p>
-<a class="popup-cta" href="https://buzzblock.shop/seasonal.html" target="_blank">Get 50% OFF Now</a>
+<a class="popup-cta" data-rewrite="true" href="https://buzzblock.shop/seasonal.html" target="_blank">Get 50% OFF Now</a>
 <span class="popup-close" onclick="closeExitPopup()">×</span>
 </div>
 </div>
@@ -1029,7 +1029,7 @@ default.jpg" alt="Anonymous">
 <h2><strong>Wait! Don’t Miss This Deal</strong></h2>
 <p><strong>I just saw they’re doing 50% OFF BuzzBlock — I wish I’d known earlier!</strong><br/>
       You still have a chance to grab one before they’re gone.</p>
-<a class="popup-btn" href="https://buzzblock.shop/seasonal.html" target="_blank">Get 50% OFF Now</a>
+<a class="popup-btn" data-rewrite="true" href="https://buzzblock.shop/seasonal.html" target="_blank">Get 50% OFF Now</a>
 </div>
 </div>
 <script>
@@ -1043,49 +1043,6 @@ default.jpg" alt="Anonymous">
   </script>
 
 
-<script>
-(function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const keys = [
-    "sub", "funnel", "lp", "cluster", "country",
-    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
-  ];
-
-  // Store each parameter in localStorage
-  keys.forEach(key => {
-    const val = urlParams.get(key);
-    if (val) {
-      localStorage.setItem(key === "sub" ? "click_id" : key, val);
-    }
-  });
-
-  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
-  allLinks.forEach(link => {
-    try {
-      const originalUrl = new URL(link.href);
-      // Remove all tracking parameters from existing href first
-      keys.forEach(key => originalUrl.searchParams.delete(key));
-
-      // Re-add fresh values
-      const clickId = localStorage.getItem("click_id");
-      if (clickId) originalUrl.searchParams.set("sub", clickId);
-
-      keys.forEach(key => {
-        if (key !== "sub") {
-          const val = localStorage.getItem(key);
-          if (val) {
-            originalUrl.searchParams.set(key, val);
-          }
-        }
-      });
-
-      link.href = originalUrl.toString();
-    } catch (e) {
-      console.warn("Could not update link:", link.href);
-    }
-  });
-})();
-</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -1102,28 +1059,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+  const allLinks = document.querySelectorAll('a[data-rewrite="true"]');
   allLinks.forEach(link => {
     try {
-      const originalUrl = new URL(link.href);
-      // Clear all known tracking params first
-      keys.forEach(key => originalUrl.searchParams.delete(key));
-      // Append fresh values
+      const url = new URL(link.href);
+      keys.forEach(key => url.searchParams.delete(key)); // clear old
       const clickId = localStorage.getItem("click_id");
-      if (clickId) originalUrl.searchParams.set("sub", clickId);
+      if (clickId) url.searchParams.set("sub", clickId);
       keys.forEach(key => {
         if (key !== "sub") {
           const val = localStorage.getItem(key);
-          if (val) originalUrl.searchParams.set(key, val);
+          if (val) {
+            url.searchParams.set(key, val);
+          }
         }
       });
-      link.href = originalUrl.toString();
+      link.href = url.toString();
     } catch (e) {
-      console.warn("Could not rewrite link:", link.href);
+      console.warn("Could not update link:", link.href);
     }
   });
 });
 </script>
-
 </body>
 </html>
