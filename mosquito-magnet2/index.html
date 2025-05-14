@@ -1042,5 +1042,33 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
+
+<script>
+(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "zone_id", "widget_id", "creative_id"];
+  keys.forEach(key => {
+    const val = urlParams.get(key);
+    if (val) {
+      localStorage.setItem(key === "sub" ? "click_id" : key, val);
+    }
+  });
+
+  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+  allLinks.forEach(link => {
+    try {
+      const url = new URL(link.href);
+      const clickId = localStorage.getItem("click_id");
+      if (clickId) {
+        url.searchParams.set("sub", clickId);
+        link.href = url.toString();
+      }
+    } catch (e) {
+      console.warn("Could not update link:", link.href);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
