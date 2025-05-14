@@ -1086,5 +1086,44 @@ default.jpg" alt="Anonymous">
   });
 })();
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const keys = [
+    "sub", "funnel", "lp", "cluster", "country",
+    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
+  ];
+
+  keys.forEach(key => {
+    const val = urlParams.get(key);
+    if (val) {
+      localStorage.setItem(key === "sub" ? "click_id" : key, val);
+    }
+  });
+
+  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+  allLinks.forEach(link => {
+    try {
+      const originalUrl = new URL(link.href);
+      // Clear all known tracking params first
+      keys.forEach(key => originalUrl.searchParams.delete(key));
+      // Append fresh values
+      const clickId = localStorage.getItem("click_id");
+      if (clickId) originalUrl.searchParams.set("sub", clickId);
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) originalUrl.searchParams.set(key, val);
+        }
+      });
+      link.href = originalUrl.toString();
+    } catch (e) {
+      console.warn("Could not rewrite link:", link.href);
+    }
+  });
+});
+</script>
+
 </body>
 </html>
