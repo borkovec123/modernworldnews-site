@@ -5,7 +5,6 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
-
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
@@ -1060,26 +1059,27 @@ default.jpg" alt="Anonymous">
     }
   });
 
-  // Rewrite all outbound links
   const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
   allLinks.forEach(link => {
     try {
-      const url = new URL(link.href);
+      const originalUrl = new URL(link.href);
+      // Remove all tracking parameters from existing href first
+      keys.forEach(key => originalUrl.searchParams.delete(key));
+
+      // Re-add fresh values
       const clickId = localStorage.getItem("click_id");
-      if (clickId) {
-        url.searchParams.set("sub", clickId);
-      }
+      if (clickId) originalUrl.searchParams.set("sub", clickId);
 
       keys.forEach(key => {
         if (key !== "sub") {
           const val = localStorage.getItem(key);
           if (val) {
-            url.searchParams.set(key, val);
+            originalUrl.searchParams.set(key, val);
           }
         }
       });
 
-      link.href = url.toString();
+      link.href = originalUrl.toString();
     } catch (e) {
       console.warn("Could not update link:", link.href);
     }
