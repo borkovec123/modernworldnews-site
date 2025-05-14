@@ -1056,5 +1056,20 @@ default.jpg" alt="Anonymous">
   }
 </script>
 
+
+<script>
+(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "zone_id", "widget_id", "creative_id"];
+
+  keys.forEach(key => {
+    const val = urlParams.get(key);
+    if (val) {
+      localStorage.setItem(key === "sub" ? "click_id" : key, val);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
