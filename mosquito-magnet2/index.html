@@ -5,22 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
-  <script>
-    (function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "creative_id", "zone_id", "widget_id"];
-      keys.forEach(key => {
-        const value = urlParams.get(key);
-        if (value) {
-          localStorage.setItem(key, value);
-        }
-      });
-      const clickId = urlParams.get("sub");
-      if (clickId) {
-        localStorage.setItem("click_id", clickId);
-      }
-    })();
-  </script>
+
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
@@ -271,7 +256,6 @@
 <span>✔️ Home &amp; Wellness Contributor | May 2025 | Warsaw, PL</span>
 </div>
 </div>
-
 <p>Ever wonder why some homes seem to have more mosquitoes than others — even in the same neighborhood?</p>
 <p>It’s not your imagination.</p>
 <p>In warmer months, mosquitoes are drawn to subtle things: indoor lighting, open windows, areas with even tiny bits of standing water, and especially homes that leave doors cracked for fresh air.</p>
@@ -1059,10 +1043,16 @@ default.jpg" alt="Anonymous">
     });
   </script>
 
+
 <script>
 (function () {
   const urlParams = new URLSearchParams(window.location.search);
-  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "zone_id", "widget_id", "creative_id"];
+  const keys = [
+    "sub", "funnel", "lp", "cluster", "country",
+    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
+  ];
+
+  // Store each parameter in localStorage
   keys.forEach(key => {
     const val = urlParams.get(key);
     if (val) {
@@ -1070,6 +1060,7 @@ default.jpg" alt="Anonymous">
     }
   });
 
+  // Rewrite all outbound links
   const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
   allLinks.forEach(link => {
     try {
@@ -1077,14 +1068,23 @@ default.jpg" alt="Anonymous">
       const clickId = localStorage.getItem("click_id");
       if (clickId) {
         url.searchParams.set("sub", clickId);
-        link.href = url.toString();
       }
+
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) {
+            url.searchParams.set(key, val);
+          }
+        }
+      });
+
+      link.href = url.toString();
     } catch (e) {
       console.warn("Could not update link:", link.href);
     }
   });
 })();
 </script>
-
 </body>
 </html>
