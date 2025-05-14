@@ -2,6 +2,48 @@
 
 <html lang="en">
 <head>
+
+<script>
+(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const keys = [
+    "sub", "funnel", "lp", "cluster", "country",
+    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
+  ];
+
+  keys.forEach(key => {
+    const val = urlParams.get(key);
+    if (val) {
+      localStorage.setItem(key === "sub" ? "click_id" : key, val);
+    }
+  });
+
+  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+  allLinks.forEach(link => {
+    try {
+      const url = new URL(link.href);
+      const clickId = localStorage.getItem("click_id");
+      if (clickId) {
+        url.searchParams.set("sub", clickId);
+      }
+
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) {
+            url.searchParams.set(key, val);
+          }
+        }
+      });
+
+      link.href = url.toString();
+    } catch (e) {
+      console.warn("Could not update link:", link.href);
+    }
+  });
+})();
+</script>
+
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
