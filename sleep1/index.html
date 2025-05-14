@@ -1075,5 +1075,23 @@ default.jpg" alt="Anonymous">
   }
 </script>
 
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sub = params.get("sub");
+  if (sub) {
+    const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+    allLinks.forEach(link => {
+      try {
+        const url = new URL(link.href);
+        url.searchParams.set("sub", sub);
+        link.href = url.toString();
+      } catch (e) {
+        console.warn("Invalid link format for tracking update:", link.href);
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
