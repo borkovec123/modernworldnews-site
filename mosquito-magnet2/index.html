@@ -1041,6 +1041,8 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
@@ -1056,19 +1058,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  const allLinks = document.querySelectorAll('a[data-rewrite="true"]');
-  allLinks.forEach(link => {
+  // General rewrite
+  const links = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
+  links.forEach(link => {
     try {
       const url = new URL(link.href);
-      keys.forEach(key => url.searchParams.delete(key)); // clear old
+      keys.forEach(key => url.searchParams.delete(key));
       const clickId = localStorage.getItem("click_id");
       if (clickId) url.searchParams.set("sub", clickId);
       keys.forEach(key => {
         if (key !== "sub") {
           const val = localStorage.getItem(key);
-          if (val) {
-            url.searchParams.set(key, val);
-          }
+          if (val) url.searchParams.set(key, val);
         }
       });
       link.href = url.toString();
@@ -1076,8 +1077,27 @@ document.addEventListener('DOMContentLoaded', function () {
       console.warn("Could not update link:", link.href);
     }
   });
+
+  // 🔒 Explicit rewrite of the side image CTA
+  const sideLink = document.querySelector('a[href="https://9805o.bemobtrcks.com/click"]');
+  if (sideLink) {
+    try {
+      const sideUrl = new URL(sideLink.href);
+      keys.forEach(key => sideUrl.searchParams.delete(key));
+      const clickId = localStorage.getItem("click_id");
+      if (clickId) sideUrl.searchParams.set("sub", clickId);
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) sideUrl.searchParams.set(key, val);
+        }
+      });
+      sideLink.href = sideUrl.toString();
+    } catch (err) {
+      console.warn("Side image link rewrite failed.");
+    }
+  }
 });
 </script>
 </body>
 </html>
-
