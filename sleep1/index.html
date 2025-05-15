@@ -5,22 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
-<script>
-    (function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "creative_id", "zone_id", "widget_id"];
-      keys.forEach(key => {
-        const value = urlParams.get(key);
-        if (value) {
-          localStorage.setItem(key, value);
-        }
-      });
-      const clickId = urlParams.get("sub");
-      if (clickId) {
-        localStorage.setItem("click_id", clickId);
-      }
-    })();
-  </script>
+
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
@@ -1084,6 +1069,59 @@ default.jpg" alt="Anonymous">
       }
     });
   }
+</script>
+
+<script>
+(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "os", "zone_id", "widget_id", "creative_id"];
+
+  keys.forEach(key => {
+    const val = urlParams.get(key);
+    if (val) {
+      localStorage.setItem(key === "sub" ? "click_id" : key, val);
+    }
+  });
+
+  function updateLinks() {
+    const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
+    allLinks.forEach(link => {
+      try {
+        const base = new URL(link.href.split("?")[0]);
+        const cid = localStorage.getItem("click_id");
+        if (cid) base.searchParams.set("sub", cid);
+        keys.forEach(key => {
+          if (key !== "sub") {
+            const val = localStorage.getItem(key);
+            if (val) base.searchParams.set(key, val);
+          }
+        });
+        link.href = base.toString();
+      } catch (e) {
+        console.warn("Could not update link:", link.href);
+      }
+    });
+
+    const sideImg = document.querySelector(".sidebar img");
+    if (sideImg) {
+      sideImg.addEventListener("click", () => {
+        const sideUrl = new URL("https://buzzblock.shop");
+        const cid = localStorage.getItem("click_id");
+        if (cid) sideUrl.searchParams.set("sub", cid);
+        keys.forEach(key => {
+          if (key !== "sub") {
+            const val = localStorage.getItem(key);
+            if (val) sideUrl.searchParams.set(key, val);
+          }
+        });
+        window.location.href = sideUrl.toString();
+      });
+    }
+  }
+
+  updateLinks();
+  document.addEventListener("DOMContentLoaded", updateLinks);
+})();
 </script>
 </body>
 </html>
