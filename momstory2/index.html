@@ -1052,46 +1052,41 @@ default.jpg" alt="Anonymous">
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="buy.stripe.com"]');
+    const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
 
     allLinks.forEach(link => {
       try {
-        const url = new URL(link.href);
+        const originalUrl = new URL(link.href);
+        keys.forEach(key => originalUrl.searchParams.delete(key));
         const clickId = localStorage.getItem("click_id");
-        if (clickId) {
-          url.searchParams.set("sub", clickId);
-        }
+        if (clickId) originalUrl.searchParams.set("sub", clickId);
 
         keys.forEach(key => {
           if (key !== "sub") {
             const val = localStorage.getItem(key);
-            if (val) url.searchParams.set(key, val);
+            if (val) originalUrl.searchParams.set(key, val);
           }
         });
 
-        link.href = url.toString();
+        link.href = originalUrl.toString();
       } catch (e) {
-        console.warn("Could not update link:", link);
+        console.warn("Could not update link:", link.href);
       }
     });
 
     const sideImg = document.querySelector('.sidebar img');
     if (sideImg) {
       sideImg.addEventListener('click', () => {
-        const ctaUrl = new URL("https://buzzblock.shop/seasonal.html");
+        const sideUrl = new URL("https://buzzblock.shop/seasonal.html");
         const clickId = localStorage.getItem("click_id");
-        if (clickId) {
-          ctaUrl.searchParams.set("sub", clickId);
-        }
-
+        if (clickId) sideUrl.searchParams.set("sub", clickId);
         keys.forEach(key => {
           if (key !== "sub") {
             const val = localStorage.getItem(key);
-            if (val) ctaUrl.searchParams.set(key, val);
+            if (val) sideUrl.searchParams.set(key, val);
           }
         });
-
-        window.location.href = ctaUrl;
+        window.location.href = sideUrl.toString();
       });
     }
   });
