@@ -2,11 +2,9 @@
 
 <html lang="en">
 <head>
-
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
-
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
@@ -1042,12 +1040,9 @@ default.jpg" alt="Anonymous">
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
   const urlParams = new URLSearchParams(window.location.search);
-  const keys = [
-    "sub", "funnel", "lp", "cluster", "country",
-    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
-  ];
+  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "os", "zone_id", "widget_id", "creative_id"];
 
   keys.forEach(key => {
     const val = urlParams.get(key);
@@ -1056,25 +1051,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
-  allLinks.forEach(link => {
-    try {
-      const url = new URL(link.href);
-      keys.forEach(key => url.searchParams.delete(key)); // remove old
-      const clickId = localStorage.getItem("click_id");
-      if (clickId) url.searchParams.set("sub", clickId);
-      keys.forEach(key => {
-        if (key !== "sub") {
-          const val = localStorage.getItem(key);
-          if (val) url.searchParams.set(key, val);
+  document.addEventListener("DOMContentLoaded", () => {
+    const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="buy.stripe.com"]');
+
+    allLinks.forEach(link => {
+      try {
+        const url = new URL(link.href);
+        const clickId = localStorage.getItem("click_id");
+        if (clickId) {
+          url.searchParams.set("sub", clickId);
         }
+
+        keys.forEach(key => {
+          if (key !== "sub") {
+            const val = localStorage.getItem(key);
+            if (val) url.searchParams.set(key, val);
+          }
+        });
+
+        link.href = url.toString();
+      } catch (e) {
+        console.warn("Could not update link:", link);
+      }
+    });
+
+    const sideImg = document.querySelector('.sidebar img');
+    if (sideImg) {
+      sideImg.addEventListener('click', () => {
+        const ctaUrl = new URL("https://buzzblock.shop/seasonal.html");
+        const clickId = localStorage.getItem("click_id");
+        if (clickId) {
+          ctaUrl.searchParams.set("sub", clickId);
+        }
+
+        keys.forEach(key => {
+          if (key !== "sub") {
+            const val = localStorage.getItem(key);
+            if (val) ctaUrl.searchParams.set(key, val);
+          }
+        });
+
+        window.location.href = ctaUrl;
       });
-      link.href = url.toString();
-    } catch (e) {
-      console.warn("Could not rewrite link:", link.href);
     }
   });
-});
+})();
 </script>
 </body>
 </html>
