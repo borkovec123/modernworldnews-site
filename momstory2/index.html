@@ -3,66 +3,10 @@
 <html lang="en">
 <head>
 
-<script>
-(function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const keys = [
-    "sub", "funnel", "lp", "cluster", "country",
-    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
-  ];
-
-  keys.forEach(key => {
-    const val = urlParams.get(key);
-    if (val) {
-      localStorage.setItem(key === "sub" ? "click_id" : key, val);
-    }
-  });
-
-  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
-  allLinks.forEach(link => {
-    try {
-      const url = new URL(link.href);
-      const clickId = localStorage.getItem("click_id");
-      if (clickId) {
-        url.searchParams.set("sub", clickId);
-      }
-
-      keys.forEach(key => {
-        if (key !== "sub") {
-          const val = localStorage.getItem(key);
-          if (val) {
-            url.searchParams.set(key, val);
-          }
-        }
-      });
-
-      link.href = url.toString();
-    } catch (e) {
-      console.warn("Could not update link:", link.href);
-    }
-  });
-})();
-</script>
-
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>BuzzBlock Advertorial</title>
-      <script>
-    (function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "creative_id", "zone_id", "widget_id"];
-      keys.forEach(key => {
-        const value = urlParams.get(key);
-        if (value) {
-          localStorage.setItem(key, value);
-        }
-      });
-      const clickId = urlParams.get("sub");
-      if (clickId) {
-        localStorage.setItem("click_id", clickId);
-      }
-    })();
-  </script>
+
 <style>
     body {
       font-family: 'Inter', 'Roboto', sans-serif;
@@ -298,7 +242,7 @@
 <h1>Mosquitoes Were Ruining Our Evenings — This $24 UV Lamp Made Our Home Comfortable Again</h1>
 <div class="subheadline">
         In places like <span id="userCountry">Eastern Europe</span>, mosquitoes aren't dangerous — they're just unbearable. <span class="highlight">This chemical-free UV gadget is helping families enjoy summer nights again — without buzzing, biting, or sprays.</span>
-      </div>
+</div>
 <div class="ratings">
       ★★★★★ <span>3,791 Ratings</span>
 </div>
@@ -312,10 +256,9 @@
 <img alt="Author" src="../assets/images/Author.png"/>
 <div class="author-details">
 <strong>By Marta Novak</strong> <br/>
-<span>✔️ Lifestyle & Comfort Writer | Sofia, BG | May 2025</span>
+<span>✔️ Lifestyle &amp; Comfort Writer | Sofia, BG | May 2025</span>
 </div>
 </div>
-
 <p><strong>WE WANTED TO ENJOY SUMMER EVENINGS — BUT THE MOSQUITOES HAD OTHER PLANS.</strong></p>
 <p>We live in a quiet part of Sofia. Every spring, we look forward to those first warm evenings — doors open, breeze coming through the window, and dinner on the balcony.</p>
 <p>But last year, it got ridiculous. We’d be sitting down to eat and within minutes the buzzing would start. My husband would be swatting his legs, my daughter couldn’t sit still, and I was constantly apologizing to guests.</p>
@@ -1097,10 +1040,15 @@ default.jpg" alt="Anonymous">
     });
   </script>
 
+
 <script>
-(function () {
+document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
-  const keys = ["sub", "funnel", "lp", "cluster", "country", "device", "browser", "zone_id", "widget_id", "creative_id"];
+  const keys = [
+    "sub", "funnel", "lp", "cluster", "country",
+    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
+  ];
+
   keys.forEach(key => {
     const val = urlParams.get(key);
     if (val) {
@@ -1108,21 +1056,25 @@ default.jpg" alt="Anonymous">
     }
   });
 
-  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com/click"], a[href*="buy.stripe.com"]');
+  const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
   allLinks.forEach(link => {
     try {
       const url = new URL(link.href);
+      keys.forEach(key => url.searchParams.delete(key)); // remove old
       const clickId = localStorage.getItem("click_id");
-      if (clickId) {
-        url.searchParams.set("sub", clickId);
-        link.href = url.toString();
-      }
+      if (clickId) url.searchParams.set("sub", clickId);
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) url.searchParams.set(key, val);
+        }
+      });
+      link.href = url.toString();
     } catch (e) {
-      console.warn("Could not update link:", link.href);
+      console.warn("Could not rewrite link:", link.href);
     }
   });
-})();
+});
 </script>
-
 </body>
 </html>
