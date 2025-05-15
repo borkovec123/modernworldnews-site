@@ -1041,61 +1041,49 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
+
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const urlParams = new URLSearchParams(window.location.search);
-  const keys = [
-    "sub", "funnel", "lp", "cluster", "country",
-    "device", "browser", "os", "zone_id", "widget_id", "creative_id"
-  ];
+  (function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const clickId = urlParams.get("sub") || localStorage.getItem("click_id");
 
-  keys.forEach(key => {
-    const val = urlParams.get(key);
-    if (val) {
-      localStorage.setItem(key === "sub" ? "click_id" : key, val);
-    }
-  });
+    if (clickId) localStorage.setItem("click_id", clickId);
 
-  // General rewrite
-  const links = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
-  links.forEach(link => {
-    try {
-      const url = new URL(link.href);
-      keys.forEach(key => url.searchParams.delete(key));
-      const clickId = localStorage.getItem("click_id");
-      if (clickId) url.searchParams.set("sub", clickId);
-      keys.forEach(key => {
-        if (key !== "sub") {
-          const val = localStorage.getItem(key);
+    const keys = [
+      "funnel", "lp", "cluster", "country", "device",
+      "browser", "os", "zone_id", "widget_id", "creative_id"
+    ];
+
+    keys.forEach(key => {
+      const val = urlParams.get(key);
+      if (val) localStorage.setItem(key, val);
+    });
+
+    const allLinks = document.querySelectorAll(
+      'a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]'
+    );
+
+    allLinks.forEach(link => {
+      try {
+        const url = new URL(link.href);
+        keys.forEach(key => url.searchParams.delete(key));
+        url.searchParams.delete("sub");
+
+        const cid = localStorage.getItem("click_id") || urlParams.get("sub");
+        if (cid) url.searchParams.set("sub", cid);
+
+        keys.forEach(key => {
+          const val = localStorage.getItem(key) || urlParams.get(key);
           if (val) url.searchParams.set(key, val);
-        }
-      });
-      link.href = url.toString();
-    } catch (e) {
-      console.warn("Could not update link:", link.href);
-    }
-  });
+        });
 
-  // 🔒 Explicit rewrite of the side image CTA
-  const sideLink = document.querySelector('a[href="https://9805o.bemobtrcks.com/click"]');
-  if (sideLink) {
-    try {
-      const sideUrl = new URL(sideLink.href);
-      keys.forEach(key => sideUrl.searchParams.delete(key));
-      const clickId = localStorage.getItem("click_id");
-      if (clickId) sideUrl.searchParams.set("sub", clickId);
-      keys.forEach(key => {
-        if (key !== "sub") {
-          const val = localStorage.getItem(key);
-          if (val) sideUrl.searchParams.set(key, val);
-        }
-      });
-      sideLink.href = sideUrl.toString();
-    } catch (err) {
-      console.warn("Side image link rewrite failed.");
-    }
-  }
-});
+        link.href = url.toString();
+      } catch (e) {
+        console.warn("Could not update link:", link.href);
+      }
+    });
+  })();
 </script>
 </body>
 </html>
