@@ -1051,45 +1051,45 @@ default.jpg" alt="Anonymous">
     }
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function rewriteLinks() {
     const allLinks = document.querySelectorAll('a[href*="buzzblock.shop"], a[href*="bemobtrcks.com"], a[href*="stripe.com"]');
-
     allLinks.forEach(link => {
       try {
-        const originalUrl = new URL(link.href);
-        keys.forEach(key => originalUrl.searchParams.delete(key));
+        const url = new URL(link.href.split('?')[0]); // remove all existing params
         const clickId = localStorage.getItem("click_id");
-        if (clickId) originalUrl.searchParams.set("sub", clickId);
-
+        if (clickId) url.searchParams.set("sub", clickId);
         keys.forEach(key => {
           if (key !== "sub") {
             const val = localStorage.getItem(key);
-            if (val) originalUrl.searchParams.set(key, val);
+            if (val) url.searchParams.set(key, val);
           }
         });
-
-        link.href = originalUrl.toString();
+        link.href = url.toString();
       } catch (e) {
         console.warn("Could not update link:", link.href);
       }
     });
+  }
 
-    const sideImg = document.querySelector('.sidebar img');
-    if (sideImg) {
-      sideImg.addEventListener('click', () => {
-        const sideUrl = new URL("https://buzzblock.shop/seasonal.html");
-        const clickId = localStorage.getItem("click_id");
-        if (clickId) sideUrl.searchParams.set("sub", clickId);
-        keys.forEach(key => {
-          if (key !== "sub") {
-            const val = localStorage.getItem(key);
-            if (val) sideUrl.searchParams.set(key, val);
-          }
-        });
-        window.location.href = sideUrl.toString();
+  // Rewrite immediately and on DOM ready
+  rewriteLinks();
+  document.addEventListener("DOMContentLoaded", rewriteLinks);
+
+  const sideImg = document.querySelector('.sidebar img');
+  if (sideImg) {
+    sideImg.addEventListener('click', () => {
+      const sideUrl = new URL("https://buzzblock.shop/seasonal.html");
+      const clickId = localStorage.getItem("click_id");
+      if (clickId) sideUrl.searchParams.set("sub", clickId);
+      keys.forEach(key => {
+        if (key !== "sub") {
+          const val = localStorage.getItem(key);
+          if (val) sideUrl.searchParams.set(key, val);
+        }
       });
-    }
-  });
+      window.location.href = sideUrl.toString();
+    });
+  }
 })();
 </script>
 </body>
