@@ -936,13 +936,13 @@ isabella.jpg"/>
     if (countryElement && data && data.country_name) {
       countryElement.textContent = data.country_name;
     } else if (countryElement) {
-      countryElement.innerHTML = '<span style="color:#00a651;">South East Asia</span>'; // fallback
+      countryElement.innerHTML = '<span style="color:#00a651;">Eastern Europe</span>'; // fallback
     }
   })
   .catch(() => {
     const countryElement = document.getElementById('userCountry');
     if (countryElement) {
-      countryElement.innerHTML = '<span style="color:#00a651;">South East Asia</span>'; // fallback also here
+      countryElement.innerHTML = '<span style="color:#00a651;">Eastern Europe</span>'; // fallback also here
     }
   });
     </script>
