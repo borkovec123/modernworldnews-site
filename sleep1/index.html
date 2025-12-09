@@ -229,6 +229,26 @@
   </style>
 </head>
 <body>
+  <!-- Mgid Sensor -->
+<script type="text/javascript">
+  (function() {
+      var d = document, w = window;
+      w.MgSensorData = w.MgSensorData || [];
+      w.MgSensorData.push({
+          cid:911140,
+          project: "a.mgid.com"
+      });
+      var l = "a.mgid.com";
+      var n = d.getElementsByTagName("script")[0];
+      var s = d.createElement("script");
+      s.type = "text/javascript";
+      s.async = true;
+      var dt = !Date.now?new Date().valueOf():Date.now();
+      s.src = "https://" + l + "/mgsensor.js?d=" + dt;
+      n.parentNode.insertBefore(s, n);
+  })();
+</script>
+<!-- /Mgid Sensor -->
   <div class="top-banner">
     <span class="dot">🔴</span>
     <strong>UPDATE:</strong>
@@ -1071,14 +1091,18 @@ default.jpg" alt="Anonymous">
 </div>
 <!-- Exit-Intent Popup -->
 <div class="exit-popup" id="exitPopup">
-<div class="popup-content">
-<span class="popup-close" onclick="document.getElementById('exitPopup').style.display='none'">×</span>
-<img alt="Mom" class="popup-avatar" src="../assets/images/ratimir.png"/>
-<h2><strong>Wait! Don’t Miss This Deal</strong></h2>
-<p><strong>I just saw they’re doing 50% OFF BuzzBlock — I wish I’d known earlier!</strong><br/>
-      You still have a chance to grab one before they’re gone.</p>
-<a class="popup-btn" href="https://buzzblock.shop" target="_blank">Get 50% OFF Now</a>
-</div>
+  <div class="popup-content">
+    <span class="popup-close" onclick="document.getElementById('exitPopup').style.display='none'">×</span>
+    <img alt="Mom" class="popup-avatar" src="../assets/images/ratimir.png"/>
+    
+    <h2><strong>Hold On — Before You Leave</strong></h2>
+    <p>
+      <strong>BuzzBlock is still 50% OFF today — stocks are almost gone.</strong><br/>
+      Before the price goes back up, you can still secure one at the RM99 launch offer.
+    </p>
+    
+    <a class="popup-btn" href="https://buzzblock.shop" target="_blank">Get 50% OFF Now</a>
+  </div>
 </div>
 <script>
     let exitPopupShown = false;
