@@ -266,31 +266,31 @@
     <span class="dot">🔴</span>
     <strong>UPDATE:</strong>
     BuzzBlock is now available in Malaysia with 3–7 day delivery. 
-<a id="cta-link" 
-   href="#" 
+<a id="cta-link"
+   href="#"
    style="color:#000; font-weight:500; text-decoration:underline;">
    RM99 while stock lasts.
 </a>
 
 <script>
-// Build final tracking URL with all MGID parameters
-(function() {
+document.addEventListener("DOMContentLoaded", function() {
+
     const base = "https://9805o.bemobtrcks.com/click";
     const params = new URLSearchParams(window.location.search);
 
-    // Always include sub (click id from BeMob)
+    // Build URL
     let url = base + "?sub=" + encodeURIComponent(params.get("sub") || "");
 
-    // Forward MGID params
-    ["source_id", "site_id", "teaser_id", "adclid"].forEach(key => {
+    ["source_id", "site_id", "creative_id", "adclid"].forEach(key => {
         const val = params.get(key);
         if (val) url += "&" + key + "=" + encodeURIComponent(val);
     });
 
-    // APPLY TO CTA
+    // APPLY to CTA
     document.getElementById("cta-link").href = url;
-})();
+});
 </script>
+
    <span style="font-weight:500;">Current batch is limited.</span>  </div>
 <div class="container">
 <div class="main-content">
