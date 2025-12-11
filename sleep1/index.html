@@ -275,19 +275,11 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
-    const base = "https://9805o.bemobtrcks.com/click";
-    const params = new URLSearchParams(window.location.search);
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("cta-link").href =
+        passParams("https://buzzblock.shop/");
+});
 
-    // Build URL
-    let url = base + "?sub=" + encodeURIComponent(params.get("sub") || "");
-
-    ["source_id", "site_id", "creative_id", "adclid"].forEach(key => {
-        const val = params.get(key);
-        if (val) url += "&" + key + "=" + encodeURIComponent(val);
-    });
-
-    // APPLY to CTA
-    document.getElementById("cta-link").href = url;
 });
 </script>
 
