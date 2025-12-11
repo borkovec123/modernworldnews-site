@@ -253,7 +253,7 @@
     <span class="dot">🔴</span>
     <strong>UPDATE:</strong>
     BuzzBlock is now available in Malaysia with 3–7 day delivery. 
-    <a href="https://9805o.bemobtrcks.com/click" style="color:#000; font-weight:500; text-decoration:underline;">RM99 while stock lasts.</a>
+   <a href="#" class="go-product" style="color:#000; font-weight:500; text-decoration:underline;">RM99 while stock lasts.</a>
     <span style="font-weight:500;">Current batch is limited.</span>  </div>
 <div class="container">
 <div class="main-content">
@@ -1113,5 +1113,32 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // 1. Extract all tracking params from advertorial URL
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const knownParams = ["sub", "adclid", "source_id", "site_id", "teaser_id"];
+    let paramString = "";
+
+    knownParams.forEach(p => {
+        const v = urlParams.get(p);
+        if (v) {
+            paramString += (paramString ? "&" : "") + p + "=" + encodeURIComponent(v);
+        }
+    });
+
+    // 2. Build final product URL
+    const base = "https://buzzblock.shop/";
+    const finalUrl = paramString ? base + "?" + paramString : base;
+
+    // 3. Rewrite ALL CTA links with class "go-product"
+    document.querySelectorAll("a.go-product").forEach(a => {
+        a.href = finalUrl;
+    });
+});
+</script>
+
 </body>
 </html>
