@@ -277,20 +277,21 @@
 (function() {
     const base = "https://9805o.bemobtrcks.com/click";
     const params = new URLSearchParams(window.location.search);
-    
+
     // Always include sub (click id from BeMob)
     let url = base + "?sub=" + encodeURIComponent(params.get("sub") || "");
 
-    // Forward MGID → BeMob → your funnel parameters
+    // Forward MGID params
     ["source_id", "site_id", "teaser_id", "adclid"].forEach(key => {
         const val = params.get(key);
         if (val) url += "&" + key + "=" + encodeURIComponent(val);
     });
 
-    // Apply to CTA
+    // APPLY TO CTA
     document.getElementById("cta-link").href = url;
 })();
-</script>    <span style="font-weight:500;">Current batch is limited.</span>  </div>
+</script>
+   <span style="font-weight:500;">Current batch is limited.</span>  </div>
 <div class="container">
 <div class="main-content">
 <div class="breadcrumbs">Home &gt; Lifestyle &gt; Home Care</div>
