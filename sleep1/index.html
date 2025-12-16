@@ -1113,41 +1113,31 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
-  // 1️⃣ Resolve REAL click_id from possibly duplicated subs
-  const subs = params.getAll("sub");
-  let clickId = null;
+    // Get ALL sub values (important!)
+    const allSubs = params.getAll("sub");
 
-  for (let i = subs.length - 1; i >= 0; i--) {
-    if (subs[i] && subs[i] !== "{click_id}") {
-      clickId = subs[i];
-      break;
+    // Take the LAST sub that is not "{click_id}"
+    let realSub = null;
+    for (let i = allSubs.length - 1; i >= 0; i--) {
+        if (allSubs[i] && allSubs[i] !== "{click_id}") {
+            realSub = allSubs[i];
+            break;
+        }
     }
-  }
 
-  // 2️⃣ Build product URL safely
-  const base = "https://buzzblock.shop/";
-  const out = new URL(base);
+    // Build product URL
+    let finalUrl = "https://buzzblock.shop/";
 
-  if (clickId) out.searchParams.set("sub", clickId);
-
-  // 3️⃣ Preserve useful MGID metadata (optional but good)
-  ["site_id", "teaser_id", "source_id"].forEach(k => {
-    const v = params.get(k);
-    if (v && !v.includes("{")) {
-      out.searchParams.set(k, v);
+    if (realSub) {
+        finalUrl += "?sub=" + encodeURIComponent(realSub);
     }
-  });
 
-  const finalUrl = out.toString();
-
-  // 4️⃣ Rewrite ALL CTAs
-  document.querySelectorAll("a.go-product").forEach(a => {
-    a.href = finalUrl;
-  });
-
-  console.log("LP → PP URL:", finalUrl);
+    // Rewrite CTAs
+    document.querySelectorAll("a.go-product").forEach(a => {
+        a.href = finalUrl;
+    });
 
 });
 </script>
