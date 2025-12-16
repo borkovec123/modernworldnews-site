@@ -1113,34 +1113,21 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
+  const externalId = params.get("externalId");
 
-  const subs = params.getAll("sub");
-  let mgidClickId = null;
-
-  for (let i = subs.length - 1; i >= 0; i--) {
-    if (subs[i] && subs[i] !== "{click_id}") {
-      mgidClickId = subs[i];
-      break;
-    }
+  if (!externalId) {
+    console.warn("LP: no externalId");
+    return;
   }
 
-  const url = new URL("https://buzzblock.shop/");
-
-  if (mgidClickId) {
-    url.searchParams.set("sub", mgidClickId);
-  }
-
-  // Optional metadata (safe)
-  ["site_id", "teaser_id", "source_id"].forEach(k => {
-    const v = params.get(k);
-    if (v && !v.includes("{")) url.searchParams.set(k, v);
-  });
+  const out = new URL("https://buzzblock.shop/");
+  out.searchParams.set("externalId", externalId);
 
   document.querySelectorAll("a.go-product").forEach(a => {
-    a.href = url.toString();
+    a.href = out.toString();
   });
 
-  console.log("LP → PP:", url.toString());
+  console.log("LP → PP externalId:", externalId);
 });
 </script>
 
