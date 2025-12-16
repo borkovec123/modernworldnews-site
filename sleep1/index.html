@@ -1113,31 +1113,21 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    const params = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
+  const externalId = params.get("externalId");
 
-    // Get ALL sub values (important!)
-    const allSubs = params.getAll("sub");
+  if (!externalId) {
+    console.warn("No externalId found on LP");
+    return;
+  }
 
-    // Take the LAST sub that is not "{click_id}"
-    let realSub = null;
-    for (let i = allSubs.length - 1; i >= 0; i--) {
-        if (allSubs[i] && allSubs[i] !== "{click_id}") {
-            realSub = allSubs[i];
-            break;
-        }
-    }
+  const finalUrl =
+    "https://buzzblock.shop/?externalId=" +
+    encodeURIComponent(externalId);
 
-    // Build product URL
-    let finalUrl = "https://buzzblock.shop/";
-
-    if (realSub) {
-        finalUrl += "?sub=" + encodeURIComponent(realSub);
-    }
-
-    // Rewrite CTAs
-    document.querySelectorAll("a.go-product").forEach(a => {
-        a.href = finalUrl;
-    });
+  document.querySelectorAll("a.go-product").forEach(a => {
+    a.href = finalUrl;
+  });
 
 });
 </script>
