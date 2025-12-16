@@ -1115,19 +1115,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
   const clickId = params.get("sub");
 
-  if (!clickId) {
-    console.warn("LP: no sub");
+  if (!clickId || clickId === "{click_id}") {
+    console.warn("LP: no valid sub");
     return;
   }
 
   const out = new URL("https://buzzblock.shop/");
   out.searchParams.set("sub", clickId);
 
+  // Optional metadata (safe)
+  ["source_id", "site_id", "creative_id"].forEach(k => {
+    const v = params.get(k);
+    if (v && !v.includes("{")) out.searchParams.set(k, v);
+  });
+
   document.querySelectorAll("a.go-product").forEach(a => {
     a.href = out.toString();
   });
 
-  console.log("LP → PP URL:", out.toString());
+  console.log("LP → PP:", out.toString());
 });
 </script>
 </body>
