@@ -1116,23 +1116,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const externalId = params.get("externalId");
 
   if (!externalId) {
-    console.warn("PP: no externalId");
+    console.warn("LP: no externalId");
     return;
   }
 
-  localStorage.setItem("externalId", externalId);
+  const out = new URL("https://buzzblock.shop/");
+  out.searchParams.set("externalId", externalId);
 
-  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(link => {
-    try {
-      const url = new URL(link.href);
-      url.searchParams.set("client_reference_id", externalId);
-      link.href = url.toString();
-    } catch (e) {}
+  document.querySelectorAll("a.go-product").forEach(a => {
+    a.href = out.toString();
   });
 
-  console.log("PP externalId:", externalId);
+  console.log("LP → PP externalId:", externalId);
 });
 </script>
-
 </body>
 </html>
