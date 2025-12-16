@@ -1123,17 +1123,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const out = new URL("https://buzzblock.shop/");
   out.searchParams.set("sub", clickId);
 
-  // optional metadata (safe)
-  ["source_id", "creative_id", "site_id"].forEach(k => {
-    const v = params.get(k);
-    if (v) out.searchParams.set(k, v);
-  });
-
   document.querySelectorAll("a.go-product").forEach(a => {
     a.href = out.toString();
   });
 
-  console.log("LP → PP:", out.toString());
+  console.log("LP → PP URL:", out.toString());
 });
 </script>
 </body>
