@@ -1113,21 +1113,20 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
-  const externalId = params.get("externalId");
+  const sub = params.get("sub");
 
-  if (!externalId) {
-    console.warn("LP: no externalId");
-    return;
+  if (!sub) {
+    console.warn("LP: no sub param");
+    return; // CTA will still work if href already exists
   }
 
-  const out = new URL("https://buzzblock.shop/");
-  out.searchParams.set("externalId", externalId);
+  const url = "https://buzzblock.shop/?sub=" + encodeURIComponent(sub);
 
   document.querySelectorAll("a.go-product").forEach(a => {
-    a.href = out.toString();
+    a.href = url;
   });
 
-  console.log("LP → PP externalId:", externalId);
+  console.log("LP → PP:", url);
 });
 </script>
 </body>
