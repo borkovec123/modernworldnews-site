@@ -1112,34 +1112,19 @@ default.jpg" alt="Anonymous">
   </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  const params = new URLSearchParams(window.location.search);
+  const clickId = params.get("sub");
 
-    const params = new URLSearchParams(window.location.search);
+  if (!clickId) return;
 
-    // Get ALL sub values (important!)
-    const allSubs = params.getAll("sub");
+  const url = new URL("https://buzzblock.shop/");
+  url.searchParams.set("sub", clickId);
 
-    // Take the LAST sub that is not "{click_id}"
-    let realSub = null;
-    for (let i = allSubs.length - 1; i >= 0; i--) {
-        if (allSubs[i] && allSubs[i] !== "{click_id}") {
-            realSub = allSubs[i];
-            break;
-        }
-    }
-
-    // Build product URL
-    let finalUrl = "https://buzzblock.shop/";
-
-    if (realSub) {
-        finalUrl += "?sub=" + encodeURIComponent(realSub);
-    }
-
-    // Rewrite CTAs
-    document.querySelectorAll("a.go-product").forEach(a => {
-        a.href = finalUrl;
-    });
-
+  document.querySelectorAll("a.go-product").forEach(a => {
+    a.href = url.toString();
+  });
 });
 </script>
+
 </body>
 </html>
