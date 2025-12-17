@@ -1115,7 +1115,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
   const clickId = params.get("sub");
 
-  if (!clickId) return;
+  if (!clickId || clickId.includes("{")) return;
 
   const url = new URL("https://buzzblock.shop/");
   url.searchParams.set("sub", clickId);
@@ -1125,6 +1125,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
+
 
 </body>
 </html>
