@@ -501,7 +501,7 @@
         <p>When you add it all up, that’s hundreds of ringgit every year — and you still wake up scratching.</p>
         
         <div style="text-align: center; margin: 40px 0;">
-<a href="#" class="go-product" style="background-color: #00a651; color: white; font-size: 20px; font-weight: bold; padding: 15px 30px; border-radius: 8px; text-decoration: none; display: inline-block;">              GET 50% OFF BUZZBLOCK NOW
+<a href="https://buzzblock.shop">            GET 50% OFF BUZZBLOCK NOW
           </a>
           <div style="margin-top: 10px; font-size: 14px; color: #666;">
               Only while supplies last!
@@ -1027,7 +1027,12 @@
     }
   });
     </script>
-<a class="floating-cta go-product" href="#" id="floatingCta">GET 50% OFF BuzzBlock Now!</a><script>
+<a class="floating-cta"
+   href="https://buzzblock.shop"
+   id="floatingCta">
+   GET 50% OFF BuzzBlock Now!
+</a>
+  <script>
         window.addEventListener('scroll', function() {
           const floatingCta = document.getElementById('floatingCta');
           const scrollPosition = window.scrollY;
@@ -1083,7 +1088,7 @@ default.jpg" alt="Anonymous">
 <div class="exit-popup-content">
 <h2>Wait! Don’t Miss This Deal</h2>
 <p>We’re still offering <strong>50% OFF BuzzBlock</strong> — grab yours now before it's gone!</p>
-<a class="popup-cta go-product" href="#">Get 50% OFF Now</a>
+<a href="https://buzzblock.shop">Get 50% OFF Now</a>
   <span class="popup-close" onclick="closeExitPopup()">×</span>
 </div>
 </div>
@@ -1099,7 +1104,7 @@ default.jpg" alt="Anonymous">
       Before the price goes back up, you can still secure one at the RM99 launch offer.
     </p>
     
-<a class="popup-btn go-product" href="#">Get 50% OFF Now</a>  </div>
+<a class="popup-btn go-product" <a href="https://buzzblock.shop">Get 50% OFF Now</a>  </div>
 </div>
 <script>
     let exitPopupShown = false;
@@ -1110,37 +1115,7 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    const params = new URLSearchParams(window.location.search);
-
-    // Get ALL sub values (important!)
-    const allSubs = params.getAll("sub");
-
-    // Take the LAST sub that is not "{click_id}"
-    let realSub = null;
-    for (let i = allSubs.length - 1; i >= 0; i--) {
-        if (allSubs[i] && allSubs[i] !== "{click_id}") {
-            realSub = allSubs[i];
-            break;
-        }
-    }
-
-    // Build product URL
-    let finalUrl = "https://buzzblock.shop/";
-
-    if (realSub) {
-        finalUrl += "?sub=" + encodeURIComponent(realSub);
-    }
-
-    // Rewrite CTAs
-    document.querySelectorAll("a.go-product").forEach(a => {
-        a.href = finalUrl;
-    });
-
-});
-</script>
 
 
 </body>
