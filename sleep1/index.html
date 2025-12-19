@@ -1122,16 +1122,22 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
-  const out = new URL("https://buzzblock.shop/");
-
-  const clickId = params.get("click_id");
-  if (clickId) out.searchParams.set("click_id", clickId);
-
+  const basePP = "https://buzzblock.shop/";  // your PP base URL
+  const out = new URL(basePP);
+  
+  // Pass through all existing params (including adclid, source, teaser_id, widget_id, etc.)
+  for (const [key, value] of params) {
+    out.searchParams.set(key, value);
+  }
+  
+  // Optionally rename adclid → click_id if your PP needs it internally, but keep adclid too
+  // if (params.has('adclid')) out.searchParams.set('click_id', params.get('adclid'));
+  
   document.querySelectorAll("a.go-product").forEach(a => {
     a.href = out.toString();
   });
-
-  console.log("LP → PP:", out.toString());
+  
+  console.log("Updated LP → PP link:", out.toString());
 });
 </script>
 
