@@ -255,9 +255,9 @@
     BuzzBlock is now available in Malaysia with 3–7 day delivery. 
 <a href="https://buzzblock.shop/"
    class="go-product"
-   onclick="_mgq.push(['MgSensorInvoke', 'lp_to_pp'])">
+   onclick="window.MgSensorData && window.MgSensorData.push({event:'lp_to_pp'})">
    RM99 while stock lasts
-</a>    <span style="font-weight:500;">Current batch is limited.</span>  </div>
+</a>   <span style="font-weight:500;">Current batch is limited.</span>  </div>
 <div class="container">
 <div class="main-content">
 <div class="breadcrumbs">Home &gt; Lifestyle &gt; Home Care</div>
@@ -1118,16 +1118,12 @@ default.jpg" alt="Anonymous">
       }
     });
   </script>
-<script>
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
-
   const out = new URL("https://buzzblock.shop/");
 
-  ["click_id", "source", "source_id", "teaser_id"].forEach(k => {
-    const v = params.get(k);
-    if (v) out.searchParams.set(k, v);
-  });
+  const clickId = params.get("click_id");
+  if (clickId) out.searchParams.set("click_id", clickId);
 
   document.querySelectorAll("a.go-product").forEach(a => {
     a.href = out.toString();
@@ -1135,7 +1131,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   console.log("LP → PP:", out.toString());
 });
-</script>
 
 
 </body>
