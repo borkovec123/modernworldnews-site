@@ -1181,24 +1181,31 @@ document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
   const out = new URL("https://buzzblock.shop/");
 
-  // Pass MGID IDs
-  const keys = ["mgid_clickid", "source_id", "site_id", "teaser_id","campaign_id"]];
-  keys.forEach((k) => {
-    const v = params.get(k);
-    if (v) out.searchParams.set(k, v);
+  // Map: destinationParam -> possible incoming param names
+  const map = {
+    mgid_clickid: ["mgid_clickid", "click_id", "c", "mgid_clickid[]"],
+    source_id: ["source_id"],
+    site_id: ["site_id"],
+    teaser_id: ["teaser_id"],
+    campaign_id: ["campaign_id"]
+  };
+
+  Object.entries(map).forEach(([destKey, possibleKeys]) => {
+    for (const k of possibleKeys) {
+      const v = params.get(k);
+      if (v) {
+        out.searchParams.set(destKey, v);
+        break;
+      }
+    }
   });
 
-  // Pass UTMs (optional, but fine)
-  const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-  utmKeys.forEach((k) => {
-    const v = params.get(k);
-    if (v) out.searchParams.set(k, v);
-  });
-
+  // Update all LP → PP links
   document.querySelectorAll("a.go-product").forEach((a) => {
     a.href = out.toString();
   });
 
+  console.log("LP URL:", window.location.href);
   console.log("Updated LP → PP link:", out.toString());
 });
 </script>
