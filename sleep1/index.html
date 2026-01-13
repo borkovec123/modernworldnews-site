@@ -1179,27 +1179,27 @@ default.jpg" alt="Anonymous">
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
-  const basePP = "https://buzzblock.shop/";
-  const out = new URL(basePP);
+  const out = new URL("https://buzzblock.shop/");
 
-  // Keep MGID click id if present
-  const mgidClickId = params.get('mgid_clickid');
-  if (mgidClickId) {
-    out.searchParams.set('mgid_clickid', mgidClickId);
-  }
-
-  // Optionally keep basic UTM params
-  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
-  utmKeys.forEach(key => {
-    const val = params.get(key);
-    if (val) out.searchParams.set(key, val);
+  // Pass MGID IDs
+  const keys = ["mgid_clickid", "source_id", "site_id", "teaser_id","campaign_id"]];
+  keys.forEach((k) => {
+    const v = params.get(k);
+    if (v) out.searchParams.set(k, v);
   });
 
-  document.querySelectorAll('a.go-product').forEach(a => {
+  // Pass UTMs (optional, but fine)
+  const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  utmKeys.forEach((k) => {
+    const v = params.get(k);
+    if (v) out.searchParams.set(k, v);
+  });
+
+  document.querySelectorAll("a.go-product").forEach((a) => {
     a.href = out.toString();
   });
 
-  console.log('Updated LP → PP link:', out.toString());
+  console.log("Updated LP → PP link:", out.toString());
 });
 </script>
 
