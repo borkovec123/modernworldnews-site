@@ -1181,31 +1181,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const params = new URLSearchParams(window.location.search);
   const out = new URL("https://buzzblock.shop/");
 
-  // Map: destinationParam -> possible incoming param names
-  const map = {
-    mgid_clickid: ["mgid_clickid", "click_id", "c", "mgid_clickid[]"],
-    source_id: ["source_id"],
-    site_id: ["site_id"],
-    teaser_id: ["teaser_id"],
-    campaign_id: ["campaign_id"]
-  };
+  // Helper: copy param if present
+  function copyParam(key) {
+    const v = params.get(key);
+    if (v) out.searchParams.set(key, v);
+  }
 
-  Object.entries(map).forEach(([destKey, possibleKeys]) => {
-    for (const k of possibleKeys) {
-      const v = params.get(k);
-      if (v) {
-        out.searchParams.set(destKey, v);
-        break;
-      }
-    }
-  });
+  // Copy the MGID ids you care about
+  copyParam("mgid_clickid");
+  copyParam("source_id");
+  copyParam("site_id");
+  copyParam("teaser_id");
+  copyParam("campaign_id");
 
-  // Update all LP → PP links
-  document.querySelectorAll("a.go-product").forEach((a) => {
+  document.querySelectorAll("a.go-product").forEach(a => {
     a.href = out.toString();
   });
 
-  console.log("LP URL:", window.location.href);
+  console.log("LP search:", window.location.search);
   console.log("Updated LP → PP link:", out.toString());
 });
 </script>
