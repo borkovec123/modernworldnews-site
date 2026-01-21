@@ -1214,6 +1214,99 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+<script>
+(function () {
+  // --- config ---
+  var EVENT_NAME = "lp_qualified_reader";
+  var MIN_MS = 30000;          // 30s
+  var MIN_SCROLL = 0.50;       // 50%
 
+  // --- helpers ---
+  function qs(name) {
+    return new URLSearchParams(window.location.search).get(name) || "";
+  }
+
+  function isPlaceholder(v) {
+    if (!v) return false;
+    // catches "{source_id}" and "%7Bsource_id%7D" (already decoded by URLSearchParams)
+    return v.indexOf("{") !== -1 || v.indexOf("}") !== -1;
+  }
+
+  function safeQs(name) {
+    var v = qs(name);
+    return v && !isPlaceholder(v) ? v : "";
+  }
+
+  function getScrollRatio() {
+    var doc = document.documentElement;
+    var body = document.body;
+
+    var scrollTop = window.pageYOffset || doc.scrollTop || body.scrollTop || 0;
+    var clientH = doc.clientHeight || window.innerHeight || 0;
+
+    var scrollH = Math.max(
+      body.scrollHeight || 0,
+      doc.scrollHeight || 0,
+      body.offsetHeight || 0,
+      doc.offsetHeight || 0,
+      body.clientHeight || 0,
+      doc.clientHeight || 0
+    );
+
+    if (scrollH <= 0) return 0;
+    return (scrollTop + clientH) / scrollH;
+  }
+
+  // --- state ---
+  var fired = false;
+  var timeOk = false;
+  var scrollOk = false;
+
+  function fireIfReady() {
+    if (fired) return;
+    if (!(timeOk && scrollOk)) return;
+
+    fired = true;
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: EVENT_NAME,
+
+      // carry IDs (so we can break down by teaser/site/source)
+      mgid_clickid: safeQs("mgid_clickid") || safeQs("c"),
+      source_id: safeQs("source_id"),
+      site_id: safeQs("site_id"),
+      teaser_id: safeQs("teaser_id"),
+      campaign_id: safeQs("campaign_id"),
+
+      // optional debugging / analysis fields
+      lp_scroll_ratio: Math.min(1, Math.max(0, getScrollRatio())),
+      lp_time_ms: MIN_MS
+    });
+
+    // optional console log for sanity checks
+    // console.log("[BB] fired", EVENT_NAME);
+  }
+
+  // time condition
+  setTimeout(function () {
+    timeOk = true;
+    fireIfReady();
+  }, MIN_MS);
+
+  // scroll condition
+  function onScroll() {
+    if (scrollOk) return;
+    if (getScrollRatio() >= MIN_SCROLL) {
+      scrollOk = true;
+      fireIfReady();
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  // in case user loads mid-page / anchor
+  setTimeout(onScroll, 300);
+})();
+</script>
 </body>
 </html>
