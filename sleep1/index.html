@@ -1269,17 +1269,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (e) {
     const a = e.target.closest("a.go-product");
     if (!a) return;
-
-    const mgidClickId = params.get("mgid_clickid") || params.get("c") || "";
-    if (!mgidClickId) return;
-
-    const payload = JSON.stringify({ mgid_clickid: mgidClickId });
-    const blob = new Blob([payload], { type: "application/json" });
-
-    // sendBeacon is best-effort; we don't block navigation
-    navigator.sendBeacon(`${SERVER_ORIGIN}/mgid-goal/lp_to_pp`, blob);
-  }, true);
-
+    
+const mgidClickId = params.get("mgid_clickid") || params.get("c") || "";
+if (mgidClickId) {
+  const payload = JSON.stringify({ mgid_clickid: mgidClickId });
+  const blob = new Blob([payload], { type: "application/json" });
+  const ok = navigator.sendBeacon(`${SERVER_ORIGIN}/mgid-goal/lp_to_pp`, blob);
+  console.log("LP beacon queued:", ok);
+}
   console.log("LP search:", window.location.search);
   console.log("Updated LP → PP link:", out.toString());
 });
