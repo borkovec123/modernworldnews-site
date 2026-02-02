@@ -1244,7 +1244,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (v) out.searchParams.set(key, v);
   }
 
-  // Copy MGID params
+  // Copy MGID params to PP link
   copyParam("mgid_clickid");
   copyParam("source_id");
   copyParam("site_id");
@@ -1258,33 +1258,43 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Fire MGID additional goal (S2S via your server) on click
-  document.addEventListener("click", function (e) {
-    const a = e.target.closest("a.go-product");
-    if (!a) return;
+  document.addEventListener(
+    "click",
+    function (e) {
+      const a = e.target.closest("a.go-product");
+      if (!a) return;
 
-    const mgidClickId = params.get("mgid_clickid") || params.get("c") || "";
-    if (mgidClickId) {
-const payloadObj = { mgid_clickid: mgidClickId };
+      const mgidClickId = params.get("mgid_clickid") || params.get("c") || "";
 
-console.log("LP sending fetch:", payloadObj);
+      console.log("LP click detected. mgidClickId =", mgidClickId);
 
-fetch(`${SERVER_ORIGIN}/mgid-goal/lp_to_pp`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payloadObj),
-  keepalive: true,
-})
-  .then(async (r) => {
-    const text = await r.text();
-    console.log("LP fetch response:", r.status, text);
-  })
-  .catch((err) => {
-    console.error("LP fetch failed:", err);
-  });
+      if (mgidClickId) {
+        const payloadObj = { mgid_clickid: mgidClickId };
 
-    console.log("LP search:", window.location.search);
-    console.log("Updated LP → PP link:", out.toString());
-  }, true);
+        console.log("LP sending fetch:", payloadObj);
+
+        fetch(`${SERVER_ORIGIN}/mgid-goal/lp_to_pp`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloadObj),
+          keepalive: true,
+        })
+          .then(async (r) => {
+            const text = await r.text();
+            console.log("LP fetch response:", r.status, text);
+          })
+          .catch((err) => {
+            console.error("LP fetch failed:", err);
+          });
+      } else {
+        console.log("LP NOT sending fetch (missing mgid_clickid)");
+      }
+
+      console.log("LP search:", window.location.search);
+      console.log("Updated LP → PP link:", out.toString());
+    },
+    true
+  );
 });
 </script>
 <script>
